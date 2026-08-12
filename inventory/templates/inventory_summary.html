@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Inventory Summary — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Module 08</p>{% endblock %}
+{% block page_title %}Inventory Summary{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">A snapshot of everything currently in stock.</p>{% endblock %}
+
+{% block content %}
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Products</div>
+      <div class="stat-number">{{ total_products|default:"0" }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Categories</div>
+      <div class="stat-number">{{ total_categories|default:"0" }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Stock (units)</div>
+      <div class="stat-number">{{ total_stock|default:"0" }}</div>
+    </div>
+    <div class="stat-card good">
+      <div class="stat-label">Total Inventory Value</div>
+      <div class="stat-number">₹{{ total_inventory_value|default:"0" }}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>By Category</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Category</th><th>Products</th><th>Total Stock</th><th>Stock Value</th></tr></thead>
+        <tbody>
+          {% for row in category_breakdown %}
+          <tr>
+            <td>{{ row.category }}</td>
+            <td>{{ row.product_count }}</td>
+            <td>{{ row.total_stock }}</td>
+            <td>₹{{ row.stock_value }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-muted" style="text-align:center; padding:24px;">No category data yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}

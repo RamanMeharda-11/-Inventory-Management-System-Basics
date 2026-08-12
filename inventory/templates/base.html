@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Inventory Management System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <div class="app-shell">
+        <!-- ============================= SIDEBAR ============================= -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-mark">SI</div>
+                <div class="brand-name">
+                    Smart Inventory
+                    <span>Core Python Project</span>
+                </div>
+            </div>
+
+
+            <ul class="nav-list">
+                <li><a href="{% url 'dashboard' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <span class="nav-badge">01</span> Dashboard</a></li>
+                <li><a href="{% url 'add_product' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'add_product' %}active{% endif %}">
+                        <span class="nav-badge">02</span> Add Product</a></li>
+                <li><a href="{% url 'view_products' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'view_products' %}active{% endif %}">
+                        <span class="nav-badge">03</span> View Products</a></li>
+                <li><a href="{% url 'search_product' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'search_product' %}active{% endif %}">
+                        <span class="nav-badge">04</span> Search Product</a></li>
+                <li><a href="{% url 'sell_product' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'sell_product' %}active{% endif %}">
+                        <span class="nav-badge">05</span> Sell Product</a></li>
+
+                <div class="nav-group-label">Reports</div>
+
+                <li><a href="{% url 'low_stock_report' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'low_stock_report' %}active{% endif %}">
+                        <span class="nav-badge">06</span> Low Stock Report</a></li>
+                <li><a href="{% url 'inventory_summary' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'inventory_summary' %}active{% endif %}">
+                        <span class="nav-badge">07</span> Inventory Summary</a></li>
+                <li><a href="{% url 'sales_report' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'sales_report' %}active{% endif %}">
+                        <span class="nav-badge">08</span> Sales Report</a></li>
+
+                <div class="nav-group-label">Account</div>
+
+                <li><a href="{% url 'change_password' %}"
+                        class="nav-item {% if request.resolver_match.url_name == 'change_password' %}active{% endif %}">
+                        <span class="nav-badge">09</span> Change Password</a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'logout' %}" class="logout-link">&#8592; Logout</a>
+            </div>
+        </aside>
+
+        <!-- ============================== MAIN =============================== -->
+        <main class="main">
+            <div class="topbar">
+                <div>
+                    {% block eyebrow %}<p class="page-eyebrow">Inventory / Overview</p>{% endblock %}
+                    <h1 class="page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+                    {% block page_subtitle %}{% endblock %}
+                </div>
+                <div class="topbar-user">
+                    <div class="avatar">{{ request.user.username|default:"AD"|slice:":2"|upper }}</div>
+                    <span>{{ request.user.username|default:"Admin" }}</span>
+                </div>
+            </div>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="auth-error" style="background:var(--success-bg); color:var(--success); margin-bottom:18px;">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+
+    </div>
+
+</body>
+
+</html>

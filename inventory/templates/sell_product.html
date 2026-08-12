@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Sell Product — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Module 05</p>{% endblock %}
+{% block page_title %}Sell Product{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">Stock reduces automatically and the sale is logged to the sales history.</p>{% endblock %}
+
+{% block content %}
+
+  <div class="form-grid" style="align-items:start;">
+
+    <div class="field full" style="display:block;">
+      <div class="card">
+        <form method="post" action="{% url 'sell_product' %}">
+          {% csrf_token %}
+          <div class="form-grid">
+            <div class="field">
+              <label for="id_product_id">Product ID</label>
+              <input type="text" id="id_product_id" name="product_id" placeholder="e.g. 101" required>
+            </div>
+            <div class="field">
+              <label for="id_qty_sold">Quantity</label>
+              <input type="number" id="id_qty_sold" name="quantity" min="1" step="1" required>
+            </div>
+            <div class="field">
+              <label for="id_gst_slab">GST Slab</label>
+              <select id="id_gst_slab" name="gst_slab">
+                <option value="0">0%</option>
+                <option value="5">5%</option>
+                <option value="12">12%</option>
+                <option value="18" selected>18%</option>
+                <option value="28">28%</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="id_coupon">Discount Coupon (optional)</label>
+              <input type="text" id="id_coupon" name="coupon_code" placeholder="e.g. SAVE10">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Confirm Sale</button>
+            <button type="button" id="printBillBtn" class="btn btn-secondary">Print Bill</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  {% if bill %}
+  <div class="card" style="max-width:420px;">
+    <div class="receipt">
+      <div class="receipt-title">SALES BILL</div>
+      <div class="receipt-row"><span>Product</span><span>{{ bill.product_name }}</span></div>
+      <div class="receipt-row"><span>Price</span><span>Rs. {{ bill.price }}</span></div>
+      <div class="receipt-row"><span>Quantity</span><span>{{ bill.quantity }}</span></div>
+      <div class="receipt-divider"></div>
+      <div class="receipt-row"><span>Subtotal</span><span>Rs. {{ bill.subtotal }}</span></div>
+      <div class="receipt-row"><span>GST</span><span>Rs. {{ bill.gst_amount }}</span></div>
+      {% if bill.discount %}
+      <div class="receipt-row"><span>Discount</span><span>- Rs. {{ bill.discount }}</span></div>
+      {% endif %}
+      <div class="receipt-divider"></div>
+      <div class="receipt-row receipt-total"><span>Grand Total</span><span>Rs. {{ bill.grand_total }}</span></div>
+      <div class="receipt-divider"></div>
+      <div style="text-align:center; color:var(--purple-200);">Thank You!</div>
+    </div>
+  </div>
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Overview</p>{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">Everything running through the inventory right now.</p>{% endblock %}
+
+{% block content %}
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Products</div>
+      <div class="stat-number">{{ total_products|default:"0" }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Categories</div>
+      <div class="stat-number">{{ total_categories|default:"0" }}</div>
+    </div>
+    <div class="stat-card good">
+      <div class="stat-label">Inventory Value</div>
+      <div class="stat-number">₹{{ total_inventory_value|default:"0" }}</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-label">Low Stock Items</div>
+      <div class="stat-number">{{ low_stock_count|default:"0" }}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quick Launch</h3>
+      <span class="text-muted" style="font-size:12px;">12 operations, one dashboard</span>
+    </div>
+
+    <div class="module-grid">
+      <a href="{% url 'add_product' %}" class="module-tile">
+        <span class="module-index">01</span>
+        <span class="module-name">Add Product</span>
+      </a>
+      <a href="{% url 'view_products' %}" class="module-tile">
+        <span class="module-index">02</span>
+        <span class="module-name">View Products</span>
+      </a>
+      <a href="{% url 'search_product' %}" class="module-tile">
+        <span class="module-index">03</span>
+        <span class="module-name">Search Product</span>
+      </a>
+      <a href="{% url 'sell_product' %}" class="module-tile">
+        <span class="module-index">04</span>
+        <span class="module-name">Sell Product</span>
+      </a>
+      <a href="{% url 'low_stock_report' %}" class="module-tile">
+        <span class="module-index">05</span>
+        <span class="module-name">Low Stock Report</span>
+      </a>
+      <a href="{% url 'inventory_summary' %}" class="module-tile">
+        <span class="module-index">06</span>
+        <span class="module-name">Inventory Summary</span>
+      </a>
+      <a href="{% url 'sales_report' %}" class="module-tile">
+        <span class="module-index">07</span>
+        <span class="module-name">Sales Report</span>
+      </a>
+      <a href="{% url 'change_password' %}" class="module-tile">
+        <span class="module-index">08</span>
+        <span class="module-name">Change Password</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Recently Added Products</h3>
+      <a href="{% url 'view_products' %}" class="btn btn-secondary" style="padding:7px 14px; font-size:12.5px;">View all</a>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Qty</th><th>Brand</th></tr>
+        </thead>
+        <tbody>
+          {% for product in recent_products %}
+          <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.category }}</td>
+            <td>₹{{ product.selling_price }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ product.brand }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-muted" style="text-align:center; padding:24px;">No products added yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}
+

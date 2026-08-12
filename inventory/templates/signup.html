@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — Smart Inventory Management System</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <div class="auth-screen">
+
+    <div class="auth-visual">
+      <span class="module-index">Get Started</span>
+      <h1>Create your<br>Inventory account</h1>
+      <p>Set up your own login to add products, log sales, and track stock — no admin needed.</p>
+    </div>
+
+    <div class="auth-form-side">
+      <div class="auth-box">
+        <h2>Create account</h2>
+        <p class="page-subtitle">Fill in the details below to get started.</p>
+
+        {% if errors %}
+          <div class="auth-error">
+            {% for error in errors %}{{ error }}<br>{% endfor %}
+          </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'signup' %}">
+          {% csrf_token %}
+
+          <div class="field" style="margin-bottom:16px;">
+            <label for="id_username">Username</label>
+            <input type="text" id="id_username" name="username" placeholder="Choose a username" value="{{ username|default:'' }}" required autofocus>
+          </div>
+
+          <div class="field" style="margin-bottom:16px;">
+            <label for="id_password1">Password</label>
+            <div style="display:flex; gap:8px;">
+              <input type="password" id="id_password1" name="password1" placeholder="Create a password" required style="flex:1;">
+              <button type="button" class="btn btn-secondary" data-toggle-password="id_password1">Show</button>
+            </div>
+          </div>
+
+          <div class="field" style="margin-bottom:6px;">
+            <label for="id_password2">Confirm Password</label>
+            <div style="display:flex; gap:8px;">
+              <input type="password" id="id_password2" name="password2" placeholder="Re-enter password" required style="flex:1;">
+              <button type="button" class="btn btn-secondary" data-toggle-password="id_password2">Show</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px;">Sign Up</button>
+        </form>
+
+        <p class="attempts-note">Already have an account? <a href="{% url 'login' %}" style="color:var(--purple-600); font-weight:600;">Log in</a></p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Search Product — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Module 04</p>{% endblock %}
+{% block page_title %}Search Product{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">Look up by Product ID, name, or category.</p>{% endblock %}
+
+{% block content %}
+
+  <div class="card">
+    <form method="get" action="{% url 'search_product' %}" class="search-bar" style="margin-bottom:0;">
+      <select name="search_by">
+        <option value="id" {% if search_by == "id" %}selected{% endif %}>Product ID</option>
+        <option value="name" {% if search_by == "name" %}selected{% endif %}>Name</option>
+        <option value="category" {% if search_by == "category" %}selected{% endif %}>Category</option>
+      </select>
+      <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Type to search...">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+
+  <div class="card">
+    {% if results %}
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>ID</th><th>Name</th><th>Category</th><th>Brand</th><th>Price</th><th>Qty</th></tr>
+          </thead>
+          <tbody>
+            {% for product in results %}
+            <tr>
+              <td>{{ product.id }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.brand }}</td>
+              <td>₹{{ product.selling_price }}</td>
+              <td>{{ product.quantity }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% elif query %}
+      <div class="empty-state">
+        <div class="empty-icon">&#128269;</div>
+        <p><strong>Product Not Found</strong><br>No product matches "{{ query }}".</p>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">&#128269;</div>
+        <p>Enter a search term above to find a product.</p>
+      </div>
+    {% endif %}
+  </div>
+
+{% endblock %}

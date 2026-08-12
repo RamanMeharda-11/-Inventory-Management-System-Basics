@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Add Product — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Module 02</p>{% endblock %}
+{% block page_title %}Add Product{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">Product ID must be unique. Prices and quantity cannot be negative.</p>{% endblock %}
+
+{% block content %}
+  <div class="card" style="max-width:760px;">
+    <form method="post" action="{% url 'add_product' %}">
+      {% csrf_token %}
+      <div class="form-grid">
+
+        <div class="field">
+          <label for="id_product_id">Product ID</label>
+          <input type="text" id="id_product_id" name="product_id" placeholder="e.g. 104" required>
+        </div>
+
+        <div class="field">
+          <label for="id_name">Product Name</label>
+          <input type="text" id="id_name" name="name" placeholder="e.g. Wireless Mouse" required>
+        </div>
+
+        <div class="field">
+          <label for="id_category">Category</label>
+          <input type="text" id="id_category" name="category" placeholder="e.g. Electronics" required>
+        </div>
+
+        <div class="field">
+          <label for="id_brand">Brand</label>
+          <input type="text" id="id_brand" name="brand" placeholder="e.g. Logitech" required>
+        </div>
+
+        <div class="field">
+          <label for="id_purchase_price">Purchase Price (₹)</label>
+          <input type="number" id="id_purchase_price" name="purchase_price" min="0" step="0.01" required>
+        </div>
+
+        <div class="field">
+          <label for="id_selling_price">Selling Price (₹)</label>
+          <input type="number" id="id_selling_price" name="selling_price" min="0" step="0.01" required>
+        </div>
+
+        <div class="field">
+          <label for="id_quantity">Quantity</label>
+          <input type="number" id="id_quantity" name="quantity" min="0" step="1" required>
+          <span class="hint">Flagged as low stock once quantity drops below 5.</span>
+        </div>
+
+        <div class="field">
+          <label for="id_gst_slab">GST Slab</label>
+          <select id="id_gst_slab" name="gst_slab">
+            <option value="0">0%</option>
+            <option value="5">5%</option>
+            <option value="12">12%</option>
+            <option value="18" selected>18%</option>
+            <option value="28">28%</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save Product</button>
+        <a href="{% url 'view_products' %}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

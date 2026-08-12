@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Low Stock Report — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Module 07</p>{% endblock %}
+{% block page_title %}Low Stock Report{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">Products with quantity below 5 units — reorder soon.</p>{% endblock %}
+
+{% block content %}
+
+  <div class="card">
+    {% if low_stock_products %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Category</th><th>Current Stock</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for product in low_stock_products %}
+          <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.category }}</td>
+            <td><span class="badge badge-danger">{{ product.quantity }} left</span></td>
+            <td><a href="{% url 'update_product' product.id %}" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">Restock</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">&#9989;</div>
+      <p>All stock levels are healthy right now.</p>
+    </div>
+    {% endif %}
+  </div>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Update Product — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Module 06</p>{% endblock %}
+{% block page_title %}Update Product #{{ product.id }}{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">Product ID stays fixed — everything else can be edited.</p>{% endblock %}
+
+{% block content %}
+  <div class="card" style="max-width:760px;">
+    <form method="post" action="{% url 'update_product' product.id %}">
+      {% csrf_token %}
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Product ID</label>
+          <input type="text" value="{{ product.id }}" disabled>
+        </div>
+
+        <div class="field">
+          <label for="id_name">Product Name</label>
+          <input type="text" id="id_name" name="name" value="{{ product.name }}" required>
+        </div>
+
+        <div class="field">
+          <label for="id_category">Category</label>
+          <input type="text" id="id_category" name="category" value="{{ product.category }}" required>
+        </div>
+
+        <div class="field">
+          <label for="id_brand">Brand</label>
+          <input type="text" id="id_brand" name="brand" value="{{ product.brand }}" required>
+        </div>
+
+        <div class="field">
+          <label for="id_purchase_price">Purchase Price (₹)</label>
+          <input type="number" id="id_purchase_price" name="purchase_price" min="0" step="0.01" value="{{ product.purchase_price }}" required>
+        </div>
+
+        <div class="field">
+          <label for="id_selling_price">Selling Price (₹)</label>
+          <input type="number" id="id_selling_price" name="selling_price" min="0" step="0.01" value="{{ product.selling_price }}" required>
+        </div>
+
+        <div class="field">
+          <label for="id_quantity">Quantity</label>
+          <input type="number" id="id_quantity" name="quantity" min="0" step="1" value="{{ product.quantity }}" required>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{% url 'view_products' %}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

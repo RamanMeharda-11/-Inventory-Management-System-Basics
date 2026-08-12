@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Sales Report — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Module 09</p>{% endblock %}
+{% block page_title %}Sales Report{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">Daily, monthly and top-seller performance from sales.json.</p>{% endblock %}
+
+{% block content %}
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Sales</div>
+      <div class="stat-number">{{ total_sales|default:"0" }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Products Sold</div>
+      <div class="stat-number">{{ products_sold|default:"0" }}</div>
+    </div>
+    <div class="stat-card good">
+      <div class="stat-label">Revenue Generated</div>
+      <div class="stat-number">₹{{ revenue_generated|default:"0" }}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Export</h3>
+    </div>
+    <form method="get" action="{% url 'sales_report' %}" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+      <select name="range">
+        <option value="daily" {% if range == "daily" %}selected{% endif %}>Daily</option>
+        <option value="monthly" {% if range == "monthly" %}selected{% endif %}>Monthly</option>
+      </select>
+      <button type="submit" class="btn btn-secondary">View Report</button>
+      <a href="{% url 'export_sales_csv' %}" class="btn btn-primary">Export as CSV</a>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Top Selling Products</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Rank</th><th>Product</th><th>Units Sold</th><th>Revenue</th></tr></thead>
+        <tbody>
+          {% for item in top_products %}
+          <tr>
+            <td>#{{ forloop.counter }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.units_sold }}</td>
+            <td>₹{{ item.revenue }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-muted" style="text-align:center; padding:24px;">No sales recorded yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}

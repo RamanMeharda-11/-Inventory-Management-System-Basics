@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}View Products — Smart Inventory{% endblock %}
+{% block eyebrow %}<p class="page-eyebrow">Module 03</p>{% endblock %}
+{% block page_title %}All Products{% endblock %}
+{% block page_subtitle %}<p class="page-subtitle">{{ products|length|default:"0" }} products currently in stock.</p>{% endblock %}
+
+{% block content %}
+
+  <div class="card">
+    <div class="search-bar">
+      <input type="text" id="liveFilter" placeholder="Filter by ID, name, category or brand...">
+      <a href="{% url 'add_product' %}" class="btn btn-primary">+ Add Product</a>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table" id="productTable">
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>Category</th><th>Brand</th>
+            <th>Purchase Price</th><th>Selling Price</th><th>Qty</th><th>Status</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+          <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.category }}</td>
+            <td>{{ product.brand }}</td>
+            <td>₹{{ product.purchase_price }}</td>
+            <td>₹{{ product.selling_price }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>
+              {% if product.quantity < 5 %}
+                <span class="badge badge-danger">Low Stock</span>
+              {% else %}
+                <span class="badge badge-success">In Stock</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="row-actions">
+                <a href="{% url 'update_product' product.id %}" class="icon-btn" title="Update">&#9998;</a>
+                <form method="post" action="{% url 'delete_product' product.id %}" data-confirm="Delete {{ product.name }}? This cannot be undone.">
+                  {% csrf_token %}
+                  <button type="submit" class="icon-btn danger" title="Delete">&times;</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="empty-state" id="tableEmptyState" style="display:{% if products %}none{% else %}block{% endif %};">
+        <div class="empty-icon">&#128230;</div>
+        <p>No products match your search.</p>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
