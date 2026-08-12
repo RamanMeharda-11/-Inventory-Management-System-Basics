@@ -24,6 +24,7 @@
           {% for product in products %}
           <tr>
             <td>{{ product.id }}</td>
+            <!-- <td>{{ product.product_id }}</td> -->
             <td>{{ product.name }}</td>
             <td>{{ product.category }}</td>
             <td>{{ product.brand }}</td>
@@ -46,7 +47,7 @@
                 </form>
               </div>
             </td>
-          </tr>
+          </tr> 
           {% endfor %}
         </tbody>
       </table>

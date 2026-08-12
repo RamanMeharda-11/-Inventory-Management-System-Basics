@@ -703,3 +703,14 @@ table.data-table{
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; animation:none !important; }
 }
+
+/* Print — only the receipt should appear when "Print Bill" is clicked */
+@media print{
+  .sidebar, .topbar, .card:not(:has(.receipt)){
+    display:none !important;
+  }
+  .main{ padding:0; }
+  .receipt{
+    box-shadow:none;
+  }
+}

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Count, Sum, F
+from django.db.models import Count, Sum, F, ProtectedError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from decimal import Decimal
@@ -169,10 +169,17 @@ def update_product(request, pk):
 
 @login_required
 def delete_product(request, pk):
-    product = get_object_or_404(Product,product_id=pk)
+    product = get_object_or_404(Product, pk=pk)
     if request.method == "POST":
-        product.delete()
-        messages.success(request, "Product deleted.")
+        try:
+            product.delete()
+            messages.success(request, "Product deleted.")
+        except ProtectedError:
+            messages.error(
+                request,
+                f"Cannot delete '{product.name}' — it has past sales recorded against it. "
+                "Set its quantity to 0 instead of deleting it."
+            )
     return redirect("view_products")
 
 
