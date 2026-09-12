@@ -232,12 +232,18 @@ def sell_product(request):
         gst_amount = round(subtotal * (Decimal(gst_slab) / 100), 2)
 
         discount_amount = 0
+
         if coupon_code:
-            coupon = Coupon.objects.filter(code__iexact=coupon_code, active=True).first()
+            coupon = Coupon.objects.filter(
+                code__iexact=coupon_code,
+                active=True
+            ).first()
+
             if coupon:
                 discount_amount = coupon.discount_for(subtotal)
             else:
                 messages.error(request, "Coupon code not valid.")
+                return render(request, "sell_product.html")
 
         grand_total = subtotal + gst_amount - discount_amount
 

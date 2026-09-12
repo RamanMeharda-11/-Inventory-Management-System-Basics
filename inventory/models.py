@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 
 class Product(models.Model):
@@ -55,11 +56,15 @@ class Coupon(models.Model):
         return self.code
 
     def discount_for(self, subtotal):
-        if not self.active:
-            return 0
-        if self.kind == "percent":
-            return round(subtotal * (self.value / 100), 2)
-        return min(self.value, subtotal)
+     if not self.active:
+         return Decimal("0.00")
+
+     if self.kind == "percent":
+         discount = subtotal * (self.value / Decimal("100"))
+     else:
+         discount = self.value
+
+     return min(discount, subtotal).quantize(Decimal("0.01"))
 
 
 class Sale(models.Model):
